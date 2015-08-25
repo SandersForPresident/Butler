@@ -1,4 +1,4 @@
-var ConversationNodes = require('./conversation-nodes');
+var NodeFactory = require('./node-factory');
 
 module.exports = (function () {
 
@@ -23,7 +23,7 @@ module.exports = (function () {
 
     if (this.node === null) {
       // the converation has not yet started, grab the root (welcome) node
-      this.node = ConversationNodes.getRootNode();
+      this.node = NodeFactory.getRootNode();
       // respond with the root node message
       response = this.node.getValue();
     } else if (transition = this.node.interact(message.text)) {
