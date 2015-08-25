@@ -7,5 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Atticus White <contact@atticuswhite.com> (http://atticuswhite.com/)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "slack-client": "^1.4.1"
+  }
 }
