@@ -25,6 +25,7 @@ module.exports = (function () {
 
   Bot.prototype.connected = function () {
     // leave all channels that the bot may have been added to
+    console.log('connection successful');
     _.filter(this.service.channels, function (channel) {
       return channel.is_member;
     }).forEach(function (channel) {
