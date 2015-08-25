@@ -26,7 +26,7 @@ module.exports = (function () {
       }
       this.conversations[message.user].push(message);
     } else if (_.contains(message.text, '<@U09J43MQ9>')) {
-      logger.info(message.user, 'pinged from', messageObject.getType(), 'with message', messageObject.text);
+      logger.info(message.user, 'pinged from', messageObject.getType(), 'with message', message.text);
       messageObject.send('I only respond to DMs right now');
     }
   };
