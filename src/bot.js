@@ -4,11 +4,12 @@ var Slack = require('slack-client'),
     _ = require('lodash');
 
 module.exports = (function () {
+  var CHANNEL_TYPE_DM = 'DM',
+      BOT_ID = 'U09J43MQ9'; // this will later be dynamic
 
   function Bot (slackClient) {
     this.service = slackClient;
     this.conversations = {};
-
 
     // this.service.on('open', this.initialize.bind(this));
     this.service.on('message', this.dispatch.bind(this));
@@ -19,13 +20,13 @@ module.exports = (function () {
 
   Bot.prototype.dispatch = function (message) {
     var messageObject = this.service.getChannelGroupOrDMByID(message.channel);
-    if (messageObject.getType() === 'DM') {
+    if (messageObject.getType() === CHANNEL_TYPE_DM) {
       if (!(message.user in this.conversations)) {
         logger.info('new user conversation', message.user);
         this.conversations[message.user] = new Conversation(this, message.channel);
       }
       this.conversations[message.user].push(message);
-    } else if (_.contains(message.text, '<@U09J43MQ9>')) {
+    } else if (_.contains(message.text, '<@' + BOT_ID + '>')) {
       logger.info(message.user, 'pinged from', messageObject.getType(), 'by user', message.user, 'with message', message.text);
       messageObject.send('I only respond to DMs right now');
     }
