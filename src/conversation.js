@@ -1,13 +1,28 @@
+var ConversationNodes = require('./conversation-nodes');
+
 module.exports = (function () {
 
   function Conversation (delegate, channel) {
     this.delegate = delegate;
     this.channel = delegate.service.getDMByID(channel);
-    this.messages = [];
+    this.node = null;
   }
 
   Conversation.prototype.push = function (message) {
-    this.channel.send('response');
+    var transitionNode;
+
+    if (this.node === null) {
+      this.node = ConversationNodes.getRootNode();
+      this.node.prompt(this.channel);
+    } else {
+      transition = this.node.interact(message.text);
+      if (transition) {
+        this.node = transition;
+        this.node.prompt(this.channel);
+      } else {
+        this.node.retry(this.channel);
+      }
+    }
   };
 
   return Conversation;
