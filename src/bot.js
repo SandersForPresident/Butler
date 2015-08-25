@@ -18,11 +18,17 @@ module.exports = (function () {
   }
 
   Bot.prototype.dispatch = function (message) {
-    if (!(message.user in this.conversations)) {
-      logger.info('new user conversation', message.user);
-      this.conversations[message.user] = new Conversation(this, message.channel);
+    var messageObject = this.service.getChannelGroupOrDMByID(message.channel);
+    if (messageObject.getType() === 'DM') {
+      if (!(message.user in this.conversations)) {
+        logger.info('new user conversation', message.user);
+        this.conversations[message.user] = new Conversation(this, message.channel);
+      }
+      this.conversations[message.user].push(message);
+    } else if (_.contains(message.text, '<@U09J43MQ9>')) {
+      logger.info(message.user, 'pinged from', messageObject.getType(), 'with message', messageObject.text);
+      messageObject.send('I only respond to DMs right now');
     }
-    this.conversations[message.user].push(message);
   };
 
   Bot.prototype.connected = function () {
