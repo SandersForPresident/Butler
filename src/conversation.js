@@ -9,20 +9,17 @@ module.exports = (function () {
   }
 
   Conversation.prototype.push = function (message) {
-    var transitionNode;
+    var transitionNode,
+        response = 'Try again, I did not understand';
 
     if (this.node === null) {
       this.node = ConversationNodes.getRootNode();
-      this.node.prompt(this.channel);
-    } else {
-      transition = this.node.interact(message.text);
-      if (transition) {
-        this.node = transition;
-        this.node.prompt(this.channel);
-      } else {
-        this.node.retry(this.channel);
-      }
+      response = this.node.message;
+    } else if (transition = this.node.interact(message.text)) {
+      this.node = transition;
+      response = this.node.message;
     }
+    this.channel.send(response);
   };
 
   return Conversation;

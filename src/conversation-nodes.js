@@ -35,15 +35,6 @@ Node.prototype.interact = function (message) {
   }
 };
 
-Node.prototype.prompt = function (channel) {
-  channel.send(this.message);
-};
-
-Node.prototype.retry = function (channel) {
-  channel.send('Try again, I did not understand');
-};
-
-
 var nodes = _.map(states, function (state, index) {
   return new Node(index, state.message, state.options, state.type);
 });
