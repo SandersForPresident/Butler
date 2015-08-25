@@ -23,7 +23,7 @@ var states = [
   // 1 - Newcomer
   {
     message: [
-      "No problem, Slack is a great tool for teams. You can find a lot of documentation here: <link />\n",
+      "No problem, Slack is a great tool for teams. You can find a lot of documentation here on slack.com\n",
       "To start, what are you interested in?"
     ],
     options: [
@@ -80,7 +80,7 @@ var states = [
   {
     message: [
       "Awesome, we have plenty of projects for developers.",
-      "You can find some cool projects over in #sites-fors-sanders, #bernie-app"
+      "You can find some cool projects over in #sites-for-sanders, #bernie-app"
     ],
     type: String
   },
