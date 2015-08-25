@@ -10,6 +10,6 @@ var Slack = require('slack-client'),
     throw new Error('Slack token is required. Please provide SLACK_TOKEN as an environment variable');
   }
 
-  slack = new Slack(config.slack.key, true);
+  slack = new Slack(token, true);
   bot = new Bot(slack);
 }).call(this);
