@@ -4,7 +4,8 @@ var states = [
   // 0 - Initial Greeting
   {
     message: [
-      "Hey, is this the first time you've been here?"
+      "Hey, I'm Mr. Butler. I'm currently under development, but I'm going to be greeting new members and helping them find their way around here.\n",
+      "Let's get started! Is this the first time you've used Slack?"
     ],
     type: Boolean,
     options: [
@@ -80,7 +81,8 @@ var states = [
   {
     message: [
       "Awesome, we have plenty of projects for developers.",
-      "You can find some cool projects over in #sites-for-sanders, #bernie-app"
+      "You can find some cool projects over in #sites-for-sanders, #bernie-app\n",
+      "You can say 'restart' to start our conversation over again"
     ],
     type: String
   },
@@ -89,7 +91,8 @@ var states = [
   {
     message: [
       "Awesome, we have plenty of projects for designers",
-      "Off hand, #car-pool could use some help right now"
+      "Off hand, #car-pool could use some help right now\n",
+      "You can say 'restart' to start our conversation over again"
     ],
     type: String
   },
@@ -97,7 +100,8 @@ var states = [
   // 5 - Management
   {
     message: [
-      "Awesome, you'll want to coordinate with @jahaz. Give him a shout!"
+      "Awesome, you'll want to coordinate with @jahaz. Give him a shout!\n",
+      "You can say 'restart' to start our conversation over again"
     ],
     type: String
   },
@@ -105,7 +109,8 @@ var states = [
   // 6 - Other
   {
     message: [
-      "Cool, give @jahaz a shout to see where you can come in!"
+      "Cool, give @jahaz a shout to see where you can come in!\n",
+      "You can say 'restart' to start our conversation over again"
     ],
     type: String
   }
