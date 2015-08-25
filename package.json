@@ -9,6 +9,7 @@
   "author": "Atticus White <contact@atticuswhite.com> (http://atticuswhite.com/)",
   "license": "MIT",
   "dependencies": {
+    "lodash": "^3.10.1",
     "slack-client": "^1.4.1"
   }
 }
