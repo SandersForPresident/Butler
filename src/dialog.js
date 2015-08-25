@@ -12,11 +12,11 @@ var states = [
       {
         word: 'Yes',
         state: 1,
-        regex: ''
+        regex: /[y]+(es|e|a)*$/i
       }, {
         word: 'No',
         state: 2,
-        regex: ''
+        regex: /[n]/i
       }
     ]
   },
@@ -32,19 +32,19 @@ var states = [
       {
         word: 'Development',
         state: 3,
-        regex: ''
+        regex: /[d]+(ev)+/i
       }, {
         word: 'Design',
         state: 4,
-        regex: ''
+        regex: /[d]+(es)+/i
       }, {
         word: 'Managing',
         state: 5,
-        regex: ''
+        regex: /(man)+/i
       }, {
         word: 'Other',
         state: 6,
-        regex: ''
+        regex: /(other)+/i
       }
     ],
     type: String
@@ -62,19 +62,19 @@ var states = [
       {
         word: 'Development',
         state: 3,
-        regex: ''
+        regex: /[d]+(ev)+/i
       }, {
         word: 'Design',
         state: 4,
-        regex: ''
+        regex: /[d]+(es)+/i
       }, {
         word: 'Managing',
         state: 5,
-        regex: ''
+        regex: /(man)+/i
       }, {
         word: 'Other',
         state: 6,
-        regex: ''
+        regex: /(other)+/i
       }
     ]
   },

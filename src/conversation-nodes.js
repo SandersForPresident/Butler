@@ -18,15 +18,21 @@ Node.get = function (state) {
 };
 
 Node.prototype.interact = function (message) {
+  var transitionNode;
   if (message === "restart") {
     console.log('rewinding!');
     return Node.get(0);
   }
 
-  var transitionNode = _.find(this.options, function (option) {
-    console.log('comparing', option.word, 'to', message, option.word === message);
-    return option.word.toLowerCase() === message.toLowerCase();
+  transitionNode = _.find(this.options, function (option) {
+    console.log('comparing', option.word, 'to', message);
+    if (option.regex) {
+      return option.regex.test(message);
+    } else {
+      option.word.toLowerCase === message.toLowerCase();
+    }
   });
+
   console.log('match', transitionNode);
   if (transitionNode) {
     return Node.get(transitionNode.state);
