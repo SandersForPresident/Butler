@@ -1,5 +1,6 @@
 var Slack = require('slack-client'),
     Conversation = require('./conversation'),
+    logger = require('log4js').getLogger('bot'),
     _ = require('lodash');
 
 module.exports = (function () {
@@ -18,6 +19,7 @@ module.exports = (function () {
 
   Bot.prototype.dispatch = function (message) {
     if (!(message.user in this.conversations)) {
+      logger.info('new user conversation', message.user);
       this.conversations[message.user] = new Conversation(this, message.channel);
     }
     this.conversations[message.user].push(message);
@@ -25,7 +27,7 @@ module.exports = (function () {
 
   Bot.prototype.connected = function () {
     // leave all channels that the bot may have been added to
-    console.log('connection successful');
+    logger.info('connection successful');
     _.filter(this.service.channels, function (channel) {
       return channel.is_member;
     }).forEach(function (channel) {
