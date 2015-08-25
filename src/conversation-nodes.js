@@ -41,6 +41,20 @@ Node.prototype.interact = function (message) {
   }
 };
 
+Node.prototype.getValue = function () {
+  var output = _.map(this.options, function (option) {
+    return option.word;
+  });
+  if (output.length > 1) {
+    output[output.length - 1] = 'or ' + output[output.length - 1];
+  }
+  return [
+    this.message,
+    '\n',
+    output.join(output.length > 2 ? ', ' : ' ')
+  ].join(' ');
+};
+
 var nodes = _.map(states, function (state, index) {
   return new Node(index, state.message, state.options, state.type);
 });

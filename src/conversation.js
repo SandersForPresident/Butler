@@ -14,10 +14,10 @@ module.exports = (function () {
 
     if (this.node === null) {
       this.node = ConversationNodes.getRootNode();
-      response = this.node.message;
+      response = this.node.getValue();
     } else if (transition = this.node.interact(message.text)) {
       this.node = transition;
-      response = this.node.message;
+      response = this.node.getValue();
     }
     this.channel.send(response);
   };

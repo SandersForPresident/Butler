@@ -4,8 +4,7 @@ var states = [
   // 0 - Initial Greeting
   {
     message: [
-      "Hey, is this the first time you've been here?\n",
-      "Yes or No"
+      "Hey, is this the first time you've been here?"
     ],
     type: Boolean,
     options: [
@@ -25,8 +24,7 @@ var states = [
   {
     message: [
       "No problem, Slack is a great tool for teams. You can find a lot of documentation here: <link />\n",
-      "To start, what are you interested in?\n",
-      "Development, Design, Managing, or Other"
+      "To start, what are you interested in?"
     ],
     options: [
       {
@@ -54,8 +52,7 @@ var states = [
   {
     message: [
       "Great, you know your way around here then\n",
-      "To start, what are you interested in?\n",
-      "Development, Design, Managing, or Other"
+      "To start, what are you interested in?"
     ],
     type: String,
     options: [
