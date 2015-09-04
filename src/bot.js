@@ -18,7 +18,11 @@ module.exports = (function () {
   }
 
   Bot.prototype.dispatch = function (message) {
-    var messageObject = this.service.getChannelGroupOrDMByID(message.channel);
+    var messageObject;
+    if (!message.user || !message.channel) {
+      return;
+    }
+    messageObject = this.service.getChannelGroupOrDMByID(message.channel);
     if (messageObject.getType() === CHANNEL_TYPE_DM) {
       if (!(message.user in this.conversations)) {
         logger.info('new user conversation', message.user);
