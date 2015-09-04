@@ -1,4 +1,5 @@
 var NodeFactory = require('./node-factory'),
+    Filters = require('./filters'),
     logger = require('log4js').getLogger('conversation');
 
 module.exports = (function () {
@@ -34,6 +35,11 @@ module.exports = (function () {
       // respond with the next node message
       response = this.node.getValue();
     }
+
+    // apply any escape rules to the message
+    // @link https://api.slack.com/docs/formatting
+    response = Filters.escapeMessage(response, this.delegate.service);
+
     // send the node's message to the user
     this.channel.send(response);
   };
