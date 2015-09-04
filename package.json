@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/mocha/bin/mocha test/spec/**/*.js"
   },
   "author": "Atticus White <contact@atticuswhite.com> (http://atticuswhite.com/)",
   "license": "MIT",
@@ -12,5 +12,13 @@
     "lodash": "^3.10.1",
     "log4js": "^0.6.26",
     "slack-client": "^1.4.1"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
+    "mocha": "^2.3.0",
+    "proxyquire": "^1.7.1",
+    "sinon": "^1.16.1",
+    "sinon-chai": "^2.8.0"
   }
 }
