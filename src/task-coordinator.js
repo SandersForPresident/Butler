@@ -49,11 +49,31 @@ module.exports = (function () {
         ].join(' ');
       }.bind(this));
     }.bind(this)).then(function (messages) {
-      channel.send(messages.join('\n'));
+      if (messages.length === 0) {
+        channel.send('Nobody has recently asked for help. I\'m sure somone could use a hand somewhere!');
+      } else {
+        channel.send(messages.join('\n') + 'no');
+      }
       logger.info('help requests reported for user', user.id, '(' + user.name + ')');
     }).catch(function (error) {
       logger.error('problem fetching help requests for user', user.id, '(' + user.name + ')', error);
       channel.send('I had some trouble looking up help requests');
+    });
+  };
+
+  /**
+   * Remove help request
+   * @param  {Object} user    The user requesting to remove their help request
+   * @param  {Object} channel The channel the user had posted in
+   * @return {Object}         Promise
+   */
+  TaskCoordinator.prototype.removeHelp = function (user, channel) {
+    return this.service.removeHelpRequest(user.id).then(function () {
+      channel.send('Thanks for letting me know, I have removed your request.');
+      logger.info('help request removed for user', user.id, '(' + user.name + ')');
+    }).catch(function (error) {
+      channel.send('Hrmm.. Something went wrong trying to remove your request.');
+      logger.error('problem removing request for user', user.id, '(' + user.name + ')', error);
     });
   };
 

@@ -29,6 +29,7 @@ var Slack = require('slack-client'),
   // promisify all
   redis.getAsync = Promise.promisify(redis.get);
   redis.setAsync = Promise.promisify(redis.set);
+  redis.delAsync = Promise.promisify(redis.del);
 
   slack = new Slack(token, true);
   bot = new Bot(slack, redis);

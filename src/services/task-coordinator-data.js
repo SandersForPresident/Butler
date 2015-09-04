@@ -64,5 +64,20 @@ module.exports = (function () {
     return this.redis.hgetallAsync(key);
   };
 
+  /**
+   * Remove a help request
+   * @param  {Integer} userId ID of the user to remove the help request of
+   * @return {Object}         Promise
+   */
+  TaskCoordinatorDataService.prototype.removeHelpRequest = function (userId) {
+    var key = HELP_USER_HASHMAP_KEY_PREFIX + userId;
+
+    // remove the help request hashmap
+    return this.redis.delAsync(key).then(function () {
+      // remove the hash map key from the list
+      return this.redis.lremAsync(HELP_LIST_KEY, 0, key);
+    }.bind(this));
+  };
+
   return TaskCoordinatorDataService;
 }).call(this);
