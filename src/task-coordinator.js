@@ -1,4 +1,5 @@
 var _ = require('lodash'),
+    moment = require('moment'),
     Filter = require('./filters');
 
 module.exports = (function () {
@@ -13,7 +14,7 @@ module.exports = (function () {
       user: user.id,
       channel: channel.id,
       message: message.text,
-      date: (new Date()).getTime()
+      date: moment().unix()
     });
 
     this.delegate.redisClient.lremAsync('help', 0, key).finally(function () {
@@ -30,11 +31,15 @@ module.exports = (function () {
       return Promise.all(lookups);
     }.bind(this)).then(function (helpRequests) {
       var messages = _.map(helpRequests, function (request) {
-        console.log('request', request);
-        var message = 'User ' + Filter.escapeUserById(request.user, this.delegate.service) + ' needed help in ' + Filter.escapeChannelById(request.channel, this.delegate.service);
-        message += '\n';
-        message += '> ' + request.message.replace('<@U09KH1WV8>', '');
-        return message;
+        return [
+          Filter.escapeUserById(request.user, this.delegate.service),
+          'neeeded help in',
+          Filter.escapeChannelById(request.channel, this.delegate.service),
+          moment.unix(request.date).from(moment()) + '.',
+          '\n',
+          '>',
+          request.message.replace('<@' + this.delegate.service.self.id + '>', '')
+        ].join(' ');
       }.bind(this));
       channel.send(messages.join('\n'));
     }.bind(this)).catch(function (error) {
