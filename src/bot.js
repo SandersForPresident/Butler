@@ -4,7 +4,8 @@ var Slack = require('slack-client'),
     _ = require('lodash');
 
 module.exports = (function () {
-  var CHANNEL_TYPE_DM = 'DM';
+  var CHANNEL_TYPE_DM = 'DM',
+      CHANNEL_TYPE_CHANNEL = 'Channel';
 
   function Bot (slackClient) {
     this.service = slackClient;
@@ -22,18 +23,29 @@ module.exports = (function () {
     if (!message.user || !message.channel) {
       return;
     }
+
     user = this.service.getUserByID(message.user);
     messageObject = this.service.getChannelGroupOrDMByID(message.channel);
+
     if (messageObject.getType() === CHANNEL_TYPE_DM) {
-      if (!(message.user in this.conversations)) {
-        logger.info('new user conversation', message.user, '(', user.name, ')');
-        this.conversations[message.user] = new Conversation(this, message.channel);
-      }
-      this.conversations[message.user].push(message);
-    } else if (_.contains(message.text, '<@' + this.service.self.id + '>')) {
-      logger.info(message.user, '(', user.name, ') pinged from', messageObject.getType(), 'with message', message.text);
-      messageObject.send('I only respond to DMs right now');
+      this.respondToDM(user, message);
+    } else if (messageObject.getType() === CHANNEL_TYPE_CHANNEL &&
+      _.contains(message.text, '<@' + this.service.self.id + '>')) {
+      this.respondToMention(user, message, messageObject);
     }
+  };
+
+  Bot.prototype.respondToDM = function (user, message) {
+    if (!(message.user in this.conversations)) {
+      logger.info('new user conversation', message.user, '(', user.name, ')');
+      this.conversations[message.user] = new Conversation(this, message.channel);
+    }
+    this.conversations[message.user].push(message);
+  };
+
+  Bot.prototype.respondToMention = function (user, message, channel) {
+    channel.send('I only respond to DMs right now');
+    logger.info(message.user, '(', user.name, ') pinged from', channel.getType(), 'with message', message.text);
   };
 
   Bot.prototype.connected = function () {
