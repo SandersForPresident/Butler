@@ -2,6 +2,7 @@ var _ = require('lodash'),
     moment = require('moment'),
     logger = require('log4js').getLogger('task-coordinator'),
     Filter = require('./filters'),
+    Messages = require('./messages'),
     TaskCoordinatorDataService = require('./services/task-coordinator-data');
 
 module.exports = (function () {
@@ -19,10 +20,10 @@ module.exports = (function () {
    */
   TaskCoordinator.prototype.requestHelp = function (user, message, channel) {
     return this.service.createHelpRequest(user.id, channel.id, message.text).then(function () {
-      channel.send('I\'ll let someone know the next time they ask!');
+      channel.send(Messages.taskCoordinator.requestHelp.success());
       logger.info('help request stored for user', user.id, '(' + user.name + ')')
     }).catch(function (error) {
-      channel.send('Sorry! having an issue right now processing help requests');
+      channel.send(Messages.taskCoordinator.requestHelp.error());
       logger.error('problem storing help request for user', user.id, '('+ user.name + ')', error);
     });
   };
@@ -50,12 +51,13 @@ module.exports = (function () {
       }.bind(this));
     }.bind(this)).then(function (messages) {
       if (messages.length === 0) {
-        channel.send('Nobody has recently asked for help. I\'m sure somone could use a hand somewhere!');
+        channel.send(Messages.taskCoordinator.provideHelp.empty());
       } else {
-        channel.send(messages.join('\n'));
+        channel.send(Messages.taskCoordinator.provideHelp.success() + messages.join('\n'));
       }
       logger.info('help requests reported for user', user.id, '(' + user.name + ')');
     }).catch(function (error) {
+      channel.send(Messages.taskCoordinator.provideHelp.error());
       logger.error('problem fetching help requests for user', user.id, '(' + user.name + ')', error);
       channel.send('I had some trouble looking up help requests');
     });
@@ -69,10 +71,10 @@ module.exports = (function () {
    */
   TaskCoordinator.prototype.removeHelp = function (user, channel) {
     return this.service.removeHelpRequest(user.id).then(function () {
-      channel.send('Thanks for letting me know, I have removed your request.');
+      channel.send(Messages.taskCoordinator.removeHelp.success());
       logger.info('help request removed for user', user.id, '(' + user.name + ')');
     }).catch(function (error) {
-      channel.send('Hrmm.. Something went wrong trying to remove your request.');
+      channel.send(Messages.taskCoordinator.removeHelp.error());
       logger.error('problem removing request for user', user.id, '(' + user.name + ')', error);
     });
   };
@@ -94,12 +96,12 @@ module.exports = (function () {
         ];
         channel.send(message.join(' '));
       } else {
-        channel.send('You do not have any open help requests.');
+        channel.send(Messages.taskCoordinator.hasHelp.empty());
       }
       logger.info('checked for open help request by user', user.id, '(' + user.name + ')');
     }.bind(this)).catch(function (error) {
+      channel.send(Messages.taskCoordinator.hasHelp.error());
       logger.error('problem checking if user has open request', user.id, '(' + user.name + ')');
-      channel.send('Hrrm.. Something when wrong trying to look up your request');
     });
   };
 

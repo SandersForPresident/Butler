@@ -6,7 +6,7 @@
         "Great, I'll find someone for you.",
         "Stay tuned, I'll point someone your way."
       ],
-      "failed": [
+      "error": [
         "Sorry! I'm having an issue right now processing help requests"
       ]
     },
@@ -37,6 +37,10 @@
       ],
       "error": [
         "Hrmm.. I'm having some trouble finding that right now."
+      ],
+      "empty": [
+        "You do not have any open help requests.",
+        "You don't have any open help requests, do you need help?"
       ]
     }
   }
