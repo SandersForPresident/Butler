@@ -37,5 +37,10 @@ module.exports = (function () {
     this.channel.send(response);
   };
 
+  Conversation.prototype.introduce = function () {
+    this.node = NodeFactory.getRootNode();
+    this.channel.send(this.node.getValue());
+  };
+
   return Conversation;
 }).call(this);

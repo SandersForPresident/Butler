@@ -11,9 +11,8 @@ module.exports = (function () {
     this.service = slackClient;
     this.conversations = {};
 
-    // this.service.on('open', this.initialize.bind(this));
     this.service.on('message', this.dispatch.bind(this));
-    this.service.on('user_change', this.userJoined.bind(this));
+    this.service.on('userChange', this.userJoined.bind(this));
     this.service.on('open', this.connected.bind(this));
     this.service.login();
   }
@@ -43,7 +42,22 @@ module.exports = (function () {
   };
 
   Bot.prototype.userJoined = function (event) {
+    var userId = event.id;
+    if (event.deleted || event.is_bot) {
+      // user account deactivation, ignore
+      return;
+    }
 
+    this.service.openDM(userId, function (response) {
+      var channel;
+      if (!response.ok) {
+        return;
+      }
+      channel = response.channel;
+      this.conversations[userId] = new Conversation(this, channel.id);
+      this.conversations[userId].introduce();
+      logger.info(userId, 'joined - conversation initialized', channel.id);
+    }.bind(this));
   };
 
   return Bot;
