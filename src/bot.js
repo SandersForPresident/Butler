@@ -18,19 +18,21 @@ module.exports = (function () {
   }
 
   Bot.prototype.dispatch = function (message) {
-    var messageObject;
+    var messageObject,
+        user;
     if (!message.user || !message.channel) {
       return;
     }
+    user = this.service.getUserByID(message.user);
     messageObject = this.service.getChannelGroupOrDMByID(message.channel);
     if (messageObject.getType() === CHANNEL_TYPE_DM) {
       if (!(message.user in this.conversations)) {
-        logger.info('new user conversation', message.user);
+        logger.info('new user conversation', message.user, '(', user.name, ')');
         this.conversations[message.user] = new Conversation(this, message.channel);
       }
       this.conversations[message.user].push(message);
     } else if (_.contains(message.text, '<@' + BOT_ID + '>')) {
-      logger.info(message.user, 'pinged from', messageObject.getType(), 'by user', message.user, 'with message', message.text);
+      logger.info(message.user, '(', user.name, ') pinged from', messageObject.getType(), 'with message', message.text);
       messageObject.send('I only respond to DMs right now');
     }
   };
@@ -60,7 +62,7 @@ module.exports = (function () {
       channel = response.channel;
       this.conversations[userId] = new Conversation(this, channel.id);
       this.conversations[userId].introduce();
-      logger.info(userId, 'joined - conversation initialized', channel.id);
+      logger.info(userId, '(', event.name, ') joined - conversation initialized', channel.id);
     }.bind(this));
   };
 

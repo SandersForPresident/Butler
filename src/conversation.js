@@ -19,9 +19,10 @@ module.exports = (function () {
    */
   Conversation.prototype.push = function (message) {
     var transitionNode,
+        user = this.delegate.service.getUserByID(message.user),
         response = 'Try again, I did not understand';
 
-    logger.info(message.user, 'sent', message.text, 'in response to node', this.node ? this.node.state : 'initial node');
+    logger.info(message.user, '(', user.name, ') sent', message.text, 'in response to node', this.node ? this.node.state : 'initial node');
     if (this.node === null) {
       // the converation has not yet started, grab the root (welcome) node
       this.node = NodeFactory.getRootNode();
