@@ -40,7 +40,7 @@ module.exports = (function () {
       var messages = _.map(helpRequests, function (request) {
         return [
           Filter.escapeUserById(request.user, this.delegate.service),
-          'neeeded help in',
+          'needed help in',
           Filter.escapeChannelById(request.channel, this.delegate.service),
           moment.unix(request.date).from(moment()) + '.',
           '\n',
