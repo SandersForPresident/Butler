@@ -2,7 +2,7 @@ module.exports = (function () {
   var service = {};
 
   service.isLookingForHelp = function (message) {
-    return message.indexOf('I need help') > -1;
+    return message.indexOf('i need help') > -1;
   };
 
   service.isAskingForHelp = function (message) {
