@@ -1,0 +1,52 @@
+{
+  "task_coordinator": {
+    "request_help": {
+      "success": [
+        "I'll let someone know the next time they ask!",
+        "Great, I'll find someone for you.",
+        "Stay tuned, I'll point someone your way."
+      ],
+      "error": [
+        "Sorry! I'm having an issue right now processing help requests"
+      ]
+    },
+    "provide_help": {
+      "success": [
+        "You're in luck:\n"
+      ],
+      "empty": [
+        "Nobody has recently asked for help. I'm sure someone could use a hand somewhere!",
+        "I've got nothing for you right now, but someone somewhere could use a hand!"
+      ],
+      "error": [
+        "Hrmm.. I'm having some trouble looking up help requests. Sorry!"
+      ]
+    },
+    "remove_help": {
+      "success": [
+        "Thanks for letting me know. I have removed your request.",
+        "I hope it worked out! Your request has been removed"
+      ],
+      "error": [
+        "Hrmm.. I'm having some trouble removing your help request."
+      ]
+    },
+    "has_help": {
+      "success": [
+        "Yes, sir. You have recently asked me for help:\n"
+      ],
+      "error": [
+        "Hrmm.. I'm having some trouble finding that right now."
+      ],
+      "empty": [
+        "You do not have any open help requests.",
+        "You don't have any open help requests, do you need help?"
+      ]
+    }
+  },
+  "generic": [
+    "Hey, I don't have much to say right now..",
+    "If only I could understand more things..",
+    "I can't do much right now, but I can coordinate people that need help! Ask me if anyone needs help, or if you need help!"
+  ]
+}

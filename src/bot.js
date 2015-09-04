@@ -2,6 +2,7 @@ var Slack = require('slack-client'),
     Conversation = require('./conversation'),
     Interpretter = require('./interpretter'),
     TaskCoordinator = require('./task-coordinator'),
+    Messages = require('./messages'),
     Promise = require('bluebird'),
     Redis = require('redis'),
     logger = require('log4js').getLogger('bot'),
@@ -58,6 +59,8 @@ module.exports = (function () {
       this.taskCoordinator.removeHelp(user, channel);
     } else if (Interpretter.isCheckingForOpenHelpRequest(message.text)) {
       this.taskCoordinator.hasHelpOpen(user, channel);
+    } else {
+      channel.send(Messages.generic());
     }
     logger.info(message.user, '(', user.name, ') pinged from', channel.getType(), 'with message', message.text);
   };
