@@ -1,6 +1,9 @@
 var Slack = require('slack-client'),
     Conversation = require('./conversation'),
     Interpretter = require('./interpretter'),
+    TaskCoordinator = require('./task-coordinator'),
+    Promise = require('bluebird'),
+    Redis = require('redis'),
     logger = require('log4js').getLogger('bot'),
     _ = require('lodash');
 
@@ -8,8 +11,10 @@ module.exports = (function () {
   var CHANNEL_TYPE_DM = 'DM',
       CHANNEL_TYPE_CHANNEL = 'Channel';
 
-  function Bot (slackClient) {
+  function Bot (slackClient, redisClient) {
     this.service = slackClient;
+    this.redisClient = redisClient;
+    this.taskCoordinator = new TaskCoordinator(this)
     this.conversations = {};
 
     this.service.on('message', this.dispatch.bind(this));
@@ -45,13 +50,11 @@ module.exports = (function () {
   };
 
   Bot.prototype.respondToMention = function (user, message, channel) {
-    // channel.send('I only respond to DMs right now');
     if (Interpretter.isLookingForHelp(message.text)) {
-      channel.send('What do you need help with?');
+      this.taskCoordinator.requestHelp(user, message, channel);
     } else if (Interpretter.isAskingForHelp(message.text)) {
-      channel.send('Let me find you someone who could use your help');
+      this.taskCoordinator.provideHelp(user, message, channel);
     }
-
     logger.info(message.user, '(', user.name, ') pinged from', channel.getType(), 'with message', message.text);
   };
 

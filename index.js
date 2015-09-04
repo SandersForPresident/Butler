@@ -1,10 +1,13 @@
 var Slack = require('slack-client'),
+    Redis = require('redis'),
+    Promise = require('bluebird'),
     Bot = require('./src/bot'),
     http = require('http');
 
 (function () {
   var token = process.env.SLACK_TOKEN,
       slack,
+      redis,
       bot;
 
   if (!token) {
@@ -12,7 +15,9 @@ var Slack = require('slack-client'),
   }
 
   slack = new Slack(token, true);
-  bot = new Bot(slack);
+  redis = Redis.createClient({detect_buffers: true});
+  redis = Promise.promisifyAll(redis);
+  bot = new Bot(slack, redis);
 
   http.createServer(function (req, res) {
     res.end('Talk to me through slack');
