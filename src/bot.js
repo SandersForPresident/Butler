@@ -2,6 +2,7 @@ var Slack = require('slack-client'),
     Conversation = require('./conversation'),
     Interpretter = require('./interpretter'),
     TaskCoordinator = require('./task-coordinator'),
+    ProjectCoordinator = require('./project-coordinator'),
     Messages = require('./messages'),
     Promise = require('bluebird'),
     Redis = require('redis'),
@@ -15,7 +16,8 @@ module.exports = (function () {
   function Bot (slackClient, redisClient) {
     this.service = slackClient;
     this.redisClient = redisClient;
-    this.taskCoordinator = new TaskCoordinator(this)
+    this.taskCoordinator = new TaskCoordinator(this);
+    this.projectCoordinator = new ProjectCoordinator(this);
     this.conversations = {};
 
     this.service.on('message', this.dispatch.bind(this));
@@ -59,6 +61,8 @@ module.exports = (function () {
       this.taskCoordinator.removeHelp(user, channel);
     } else if (Interpretter.isCheckingForOpenHelpRequest(message.text)) {
       this.taskCoordinator.hasHelpOpen(user, channel);
+    } else if (Interpretter.isLookingForProject(message.text)) {
+      this.projectCoordinator.lookupProject(user, message, channel);
     } else {
       channel.send(Messages.generic());
     }

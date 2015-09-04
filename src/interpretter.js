@@ -17,5 +17,9 @@ module.exports = (function () {
     return message.toLowerCase().indexOf('have help') > -1;
   };
 
+  service.isLookingForProject = function (message) {
+    return message.toLowerCase().indexOf('any projects') > -1;
+  }
+
   return service;
 }).call(this);
