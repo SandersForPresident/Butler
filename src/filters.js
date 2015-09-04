@@ -1,4 +1,5 @@
-var _ = require('lodash');
+var _ = require('lodash'),
+    logger = require('log4js').getLogger('filter');
 
 module.exports = (function () {
   var CHANNEL_REGEX = /(#[\w\-]+)/g,
@@ -15,7 +16,7 @@ module.exports = (function () {
   service.escapeChannel = function (name, client) {
     var channel = client.getChannelByName(name);
     if (!channel || !channel.id) {
-      console.log('no channel found for filter', name);
+      logger.warn('no channel found for filter', name);
       return name;
     }
     return [
@@ -31,7 +32,7 @@ module.exports = (function () {
   service.escapeUser = function (name, client) {
     var user = client.getUserByName(name);
     if (!user || !user.id) {
-      console.log('no user found for filter', name);
+      logger.warn('no user found for filter', name);
       return name;
     }
     return [
