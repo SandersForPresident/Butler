@@ -5,11 +5,6 @@ var _ = require('lodash'),
     TaskCoordinatorDataService = require('./services/task-coordinator-data');
 
 module.exports = (function () {
-  var HELP_LIST_KEY = 'help',
-      HELP_USER_HASHMAP_KEY_PREFIX = HELP_LIST_KEY + ':' + 'user:',
-      HELP_LIST_LIMIT_LOWER = 0,
-      HELP_LIST_LIMIT_UPPER = 10;
-
   function TaskCoordinator (delegate) {
     this.delegate = delegate;
     this.service = new TaskCoordinatorDataService(delegate.redisClient);

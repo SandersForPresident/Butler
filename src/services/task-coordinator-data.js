@@ -12,6 +12,13 @@ module.exports = (function () {
     this.redis = redis;
   }
 
+  /**
+   * Create a help request
+   * @param  {Integer} userId    ID of the user creating the request
+   * @param  {Integer} channelId ID of the channel the request was posted in
+   * @param  {String}  message   The message that was posted
+   * @return {Object}            Promise
+   */
   TaskCoordinatorDataService.prototype.createHelpRequest = function (userId, channelId, message) {
     var key = HELP_USER_HASHMAP_KEY_PREFIX + userId,
         promises = [];
@@ -35,13 +42,24 @@ module.exports = (function () {
     return Promise.all(promises)
   };
 
+  /**
+   * Get open help requests
+   * @return {Object} Promise
+   */
   TaskCoordinatorDataService.prototype.getHelpRequests = function () {
+    // fetch the collection of help request keys
     return this.redis.lrangeAsync(HELP_LIST_KEY, HELP_LIST_LIMIT_LOWER, HELP_LIST_LIMIT_UPPER).then(function (keys) {
+      // fetch each help request by the key
       var lookupPromises = _.map(keys, this.getHelpRequest.bind(this));
       return Promise.all(lookupPromises);
     }.bind(this));
   };
 
+  /**
+   * Get an open help request
+   * @param  {String} key The key of the help request
+   * @return {Object}     Promise
+   */
   TaskCoordinatorDataService.prototype.getHelpRequest = function (key) {
     return this.redis.hgetallAsync(key);
   };
