@@ -13,36 +13,59 @@ module.exports = (function () {
       },
       service = {};
 
-  service.escapeChannel = function (name, client) {
-    var channel = client.getChannelByName(name);
-    if (!channel || !channel.id) {
-      logger.warn('no channel found for filter', name);
-      return name;
-    }
+  service.escape = function (id, name, token) {
     return [
       TOKEN.OPEN,
-      TOKEN.CHANNEL,
-      channel.id,
+      token,
+      id,
       TOKEN.SEPARATOR,
       name,
       TOKEN.CLOSE
     ].join('');
   };
 
-  service.escapeUser = function (name, client) {
+  service.escapeChannel = function (id, name) {
+    return service.escape(id, name, TOKEN.CHANNEL);
+  };
+
+  service.escapeUser = function (id, name) {
+    return service.escape(id, name, TOKEN.USER);
+  }
+
+  service.escapeChannelByName = function (name, client) {
+    var channel = client.getChannelByName(name);
+    if (!channel || !channel.id) {
+      logger.warn('no channel found for filter', name);
+      return name;
+    }
+    return service.escapeChannel(channel.id, name);
+  };
+
+  service.escapeUserByName = function (name, client) {
     var user = client.getUserByName(name);
     if (!user || !user.id) {
       logger.warn('no user found for filter', name);
       return name;
     }
-    return [
-      TOKEN.OPEN,
-      TOKEN.USER,
-      user.id,
-      TOKEN.SEPARATOR,
-      name,
-      TOKEN.CLOSE
-    ].join('');
+    return service.escapeUser(user.id, name);
+  };
+
+  service.escapeUserById = function (id, client) {
+    var user = client.getUserByID(id);
+    if (!user || !user.name) {
+      logger.warn('no user found for filter', id);
+      return id;
+    }
+    return service.escapeUser(id, user.name);
+  };
+
+  service.escapeChannelById = function (id, client) {
+    var channel = client.getChannelByID(id);
+    if (!channel || !channel.name) {
+      logger.warn('no channel found for filter', id);
+      return id;
+    }
+    return service.escapeChannel(id, channel.name);
   };
 
   service.escapeMessage = function (message, client) {
@@ -52,9 +75,9 @@ module.exports = (function () {
           filtered = null;
 
       if (match = CHANNEL_REGEX.exec(word)) {
-        filtered = service.escapeChannel(match[1].substring(1, match[1].length), client);
+        filtered = service.escapeChannelByName(match[1].substring(1, match[1].length), client);
       } else if (match = USER_REGEX.exec(word)) {
-        filtered = service.escapeUser(match[1].substring(1, match[1].length), client);
+        filtered = service.escapeUserByName(match[1].substring(1, match[1].length), client);
       }
       if (filtered) {
         word = word.replace(match[1], filtered);
