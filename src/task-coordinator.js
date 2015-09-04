@@ -8,18 +8,26 @@ module.exports = (function () {
   }
 
   TaskCoordinator.prototype.requestHelp = function (user, message, channel) {
-    var key = 'help:user:' + user.id;
+    var key = 'help:user:' + user.id,
+        promises = [];
 
-    this.delegate.redisClient.hmsetAsync(key, {
+    promises.push(this.delegate.redisClient.hmsetAsync(key, {
       user: user.id,
       channel: channel.id,
       message: message.text,
       date: moment().unix()
-    });
+    }));
 
-    this.delegate.redisClient.lremAsync('help', 0, key).finally(function () {
+    promises.push(this.delegate.redisClient.lremAsync('help', 0, key).finally(function () {
       return this.delegate.redisClient.lpush('help', key);
-    }.bind(this));
+    }.bind(this)));
+
+    Promise.all(promises).then(function () {
+      channel.send('I\'ll let someone know the next time they ask!');
+    }).catch(function (error) {
+      channel.send('Sorry! having an issue right now processing help requests');
+      console.log('error requesting help', error);
+    });
     channel.send('We\'ll find you some help!');
   };
 
