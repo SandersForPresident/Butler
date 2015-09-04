@@ -9,8 +9,10 @@
   "author": "Atticus White <contact@atticuswhite.com> (http://atticuswhite.com/)",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^2.9.34",
     "lodash": "^3.10.1",
     "log4js": "^0.6.26",
+    "redis": "^1.0.0",
     "slack-client": "^1.4.1"
   }
 }
