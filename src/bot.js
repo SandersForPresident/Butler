@@ -4,8 +4,7 @@ var Slack = require('slack-client'),
     _ = require('lodash');
 
 module.exports = (function () {
-  var CHANNEL_TYPE_DM = 'DM',
-      BOT_ID = 'U09J43MQ9'; // this will later be dynamic
+  var CHANNEL_TYPE_DM = 'DM';
 
   function Bot (slackClient) {
     this.service = slackClient;
@@ -31,7 +30,7 @@ module.exports = (function () {
         this.conversations[message.user] = new Conversation(this, message.channel);
       }
       this.conversations[message.user].push(message);
-    } else if (_.contains(message.text, '<@' + BOT_ID + '>')) {
+    } else if (_.contains(message.text, '<@' + this.service.self.id + '>')) {
       logger.info(message.user, '(', user.name, ') pinged from', messageObject.getType(), 'with message', message.text);
       messageObject.send('I only respond to DMs right now');
     }
@@ -40,11 +39,6 @@ module.exports = (function () {
   Bot.prototype.connected = function () {
     // leave all channels that the bot may have been added to
     logger.info('connection successful');
-    _.filter(this.service.channels, function (channel) {
-      return channel.is_member;
-    }).forEach(function (channel) {
-      channel.leave();
-    });
   };
 
   Bot.prototype.userJoined = function (event) {
