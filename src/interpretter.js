@@ -6,7 +6,7 @@ module.exports = (function () {
   };
 
   service.isAskingForHelp = function (message) {
-    return message.toLoserCase().indexOf('anyone need help') > -1;
+    return message.toLowerCase().indexOf('anyone need help') > -1;
   };
 
   return service;
