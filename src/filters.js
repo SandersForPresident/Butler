@@ -15,7 +15,7 @@ module.exports = (function () {
   service.escapeChannel = function (name, client) {
     var channel = client.getChannelByName(name);
     if (!channel || !channel.id) {
-      console.log('no channel', name);
+      console.log('no channel found for filter', name);
       return name;
     }
     return [
@@ -31,6 +31,7 @@ module.exports = (function () {
   service.escapeUser = function (name, client) {
     var user = client.getUserByName(name);
     if (!user || !user.id) {
+      console.log('no user found for filter', name);
       return name;
     }
     return [

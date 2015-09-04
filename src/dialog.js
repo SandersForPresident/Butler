@@ -92,12 +92,12 @@ var states = [
       "- #berniestrap - Bernie Sanders theme of the Twitter Bootstrap fork\n",
       "- #bus-rsvp - Reserve seats in busses to travel to a Bernie event\n",
       "- #carpool-app - Organize rides to travel to a Bernie event\n",
-      "- #elastic-searches4bs - ElasticSearch API for all our Bernie apps\n",
+      "- #elastic-search-es4bs - ElasticSearch API for all our Bernie apps\n",
       "- #map-berniesanders - The map on https://map.berniesanders.com\n",
       "- #sites-for-bernie - The http://forberniesanders.com project\n",
       "\n\n",
       "Those are just a few of the many projects we have going on. You will find new ideas brewing in #pitch-zone\n",
-      "If you'd like to learn more, feel free to reach out to @jahaz, @atticusw, @schneidmaster, @rcas, @jonculver, or @validatorian!"
+      "If you'd like to learn more, feel free to reach out to some of our mods @jahaz, @atticusw, @schneidmaster, @rcas, @jonculver, or @validatorian!"
     ],
     type: String
   },
@@ -114,12 +114,12 @@ var states = [
       "- #berniestrap - Bernie Sanders theme of the Twitter Bootstrap fork\n",
       "- #bus-rsvp - Reserve seats in busses to travel to a Bernie event\n",
       "- #carpool-app - Organize rides to travel to a Bernie event\n",
-      "- #elastic-searches4bs - ElasticSearch API for all our Bernie apps\n",
+      "- #elastic-search-es4bs - ElasticSearch API for all our Bernie apps\n",
       "- #map-berniesanders - The map on https://map.berniesanders.com\n",
       "- #sites-for-bernie - The http://forberniesanders.com project\n",
       "\n\n",
       "Those are just a few of the many projects we have going on. You will find new ideas brewing in #pitch-zone\n",
-      "If you'd like to learn more, feel free to reach out to @jahaz, @atticusw, @schneidmaster, @rcas, @jonculver, or @validatorian!"
+      "If you'd like to learn more, feel free to reach out to some of our mods @jahaz, @atticusw, @schneidmaster, @rcas, @jonculver, or @validatorian!"
     ],
     type: String
   },
