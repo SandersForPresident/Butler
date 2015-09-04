@@ -1,4 +1,5 @@
-var _ = require('lodash');
+var _ = require('lodash'),
+    Filter = require('./filters');
 
 module.exports = (function () {
   function TaskCoordinator (delegate) {
@@ -11,7 +12,8 @@ module.exports = (function () {
     this.delegate.redisClient.hmsetAsync(key, {
       user: user.id,
       channel: channel.id,
-      message: message.text
+      message: message.text,
+      date: (new Date()).getTime()
     });
 
     this.delegate.redisClient.lremAsync('help', 0, key).finally(function () {
@@ -21,19 +23,23 @@ module.exports = (function () {
   };
 
   TaskCoordinator.prototype.provideHelp = function (user, message, channel) {
-    channel.send('Let me find you someone who could use your help');
     this.delegate.redisClient.lrangeAsync('help', 0, 10).then(function (keys) {
       var lookups = _.map(keys, function (key) {
         return this.delegate.redisClient.hgetallAsync(key);
       }.bind(this));
       return Promise.all(lookups);
     }.bind(this)).then(function (helpRequests) {
-      var message = _.map(helpRequests, function (request) {
-        return 'User ' + request.user + ' needed help in ' + request.channel;
-      });
-      channel.send(message.join('\n'));
-    }).catch(function (error) {
+      var messages = _.map(helpRequests, function (request) {
+        console.log('request', request);
+        var message = 'User ' + Filter.escapeUserById(request.user, this.delegate.service) + ' needed help in ' + Filter.escapeChannelById(request.channel, this.delegate.service);
+        message += '\n';
+        message += '> ' + request.message.replace('<@U09KH1WV8>', '');
+        return message;
+      }.bind(this));
+      channel.send(messages.join('\n'));
+    }.bind(this)).catch(function (error) {
       console.log('error', error);
+      channel.send('I had some trouble looking up help requests');
     })
   };
 
