@@ -96,7 +96,7 @@ var states = [
       "- #map-berniesanders - The map on https://map.berniesanders.com\n",
       "- #sites-for-bernie - The http://forberniesanders.com project\n",
       "\n\n",
-      "Those are just a few of the many projects we have going on.\n",
+      "Those are just a few of the many projects we have going on. You will find new ideas brewing in #pitch-zone\n",
       "If you'd like to learn more, feel free to reach out to @jahaz, @atticusw, @schneidmaster, @rcas, @jonculver, or @validatorian!"
     ],
     type: String
@@ -118,7 +118,7 @@ var states = [
       "- #map-berniesanders - The map on https://map.berniesanders.com\n",
       "- #sites-for-bernie - The http://forberniesanders.com project\n",
       "\n\n",
-      "Those are just a few of the many projects we have going on.\n",
+      "Those are just a few of the many projects we have going on. You will find new ideas brewing in #pitch-zone\n",
       "If you'd like to learn more, feel free to reach out to @jahaz, @atticusw, @schneidmaster, @rcas, @jonculver, or @validatorian!"
     ],
     type: String
