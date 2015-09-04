@@ -13,20 +13,32 @@ module.exports = (function () {
       },
       service = {};
 
+  service.escape = function (id, name, token) {
+    return [
+      TOKEN.OPEN,
+      token,
+      id,
+      TOKEN.SEPARATOR,
+      name,
+      TOKEN.CLOSE
+    ].join('');
+  };
+
+  service.escapeChannel = function (id, name) {
+    return service.escape(id, name, TOKEN.CHANNEL);
+  };
+
+  service.escapeUser = function (id, name) {
+    return service.escape(id, name, TOKEN.USER);
+  }
+
   service.escapeChannelByName = function (name, client) {
     var channel = client.getChannelByName(name);
     if (!channel || !channel.id) {
       logger.warn('no channel found for filter', name);
       return name;
     }
-    return [
-      TOKEN.OPEN,
-      TOKEN.CHANNEL,
-      channel.id,
-      TOKEN.SEPARATOR,
-      name,
-      TOKEN.CLOSE
-    ].join('');
+    return service.escapeChannel(channel.id, name);
   };
 
   service.escapeUserByName = function (name, client) {
@@ -35,14 +47,25 @@ module.exports = (function () {
       logger.warn('no user found for filter', name);
       return name;
     }
-    return [
-      TOKEN.OPEN,
-      TOKEN.USER,
-      user.id,
-      TOKEN.SEPARATOR,
-      name,
-      TOKEN.CLOSE
-    ].join('');
+    return service.escapeUser(user.id, name);
+  };
+
+  service.escapeUserById = function (id, client) {
+    var user = client.getUserByID(id);
+    if (!user || !user.name) {
+      logger.warn('no user found for filter', id);
+      return id;
+    }
+    return service.escapeUser(id, user.name);
+  };
+
+  service.escapeChannelById = function (id, client) {
+    var channel = client.getChannelByID(id);
+    if (!channel || !channel.name) {
+      logger.warn('no channel found for filter', id);
+      return id;
+    }
+    return service.escapeChannel(id, channel.name);
   };
 
   service.escapeMessage = function (message, client) {
