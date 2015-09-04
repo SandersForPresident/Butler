@@ -28,7 +28,6 @@ module.exports = (function () {
       channel.send('Sorry! having an issue right now processing help requests');
       console.log('error requesting help', error);
     });
-    channel.send('We\'ll find you some help!');
   };
 
   TaskCoordinator.prototype.provideHelp = function (user, message, channel) {
