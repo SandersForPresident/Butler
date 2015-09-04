@@ -49,7 +49,7 @@ module.exports = (function () {
 
   Bot.prototype.userJoined = function (event) {
     var userId = event.id;
-    if (event.deleted || event.is_bot) {
+    if (event.deleted || event.is_bot || (event.id in this.conversations)) {
       // user account deactivation, ignore
       return;
     }
