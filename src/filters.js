@@ -1,7 +1,7 @@
 var _ = require('lodash');
 
 module.exports = (function () {
-  var CHANNEL_REGEX = /(#\w+-*\w+)/g,
+  var CHANNEL_REGEX = /(#[\w\-]+)/g,
       USER_REGEX = /(@\w+)/g,
       TOKEN = {
         OPEN: '<',
