@@ -1,5 +1,6 @@
 var Slack = require('slack-client'),
     Conversation = require('./conversation'),
+    Interpretter = require('./interpretter'),
     logger = require('log4js').getLogger('bot'),
     _ = require('lodash');
 
@@ -44,7 +45,13 @@ module.exports = (function () {
   };
 
   Bot.prototype.respondToMention = function (user, message, channel) {
-    channel.send('I only respond to DMs right now');
+    // channel.send('I only respond to DMs right now');
+    if (Interpretter.isLookingForHelp(message.text)) {
+      channel.send('What do you need help with?');
+    } else if (Interpretter.isAskingForHelp(message.text)) {
+      channel.send('Let me find you someone who could use your help');
+    }
+
     logger.info(message.user, '(', user.name, ') pinged from', channel.getType(), 'with message', message.text);
   };
 
