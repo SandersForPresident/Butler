@@ -52,7 +52,7 @@ module.exports = (function () {
       if (messages.length === 0) {
         channel.send('Nobody has recently asked for help. I\'m sure somone could use a hand somewhere!');
       } else {
-        channel.send(messages.join('\n') + 'no');
+        channel.send(messages.join('\n'));
       }
       logger.info('help requests reported for user', user.id, '(' + user.name + ')');
     }).catch(function (error) {
