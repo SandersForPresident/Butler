@@ -65,6 +65,16 @@ module.exports = (function () {
   };
 
   /**
+   * Get an open help request by a user ID
+   * @param  {Integer} userId ID of the user to check
+   * @return {Object}         Promise
+   */
+  TaskCoordinatorDataService.prototype.getHelpRequestByUserId = function (userId) {
+    var key = HELP_USER_HASHMAP_KEY_PREFIX + userId;
+    return this.getHelpRequest(key);
+  };
+
+  /**
    * Remove a help request
    * @param  {Integer} userId ID of the user to remove the help request of
    * @return {Object}         Promise

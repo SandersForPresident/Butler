@@ -77,5 +77,31 @@ module.exports = (function () {
     });
   };
 
+  /**
+   * Check if there is an open help request by a user
+   * @param  {Object}  user    The user checking if they have a request
+   * @param  {Object}  channel The channel the user posted in
+   * @return {Object}          Promise
+   */
+  TaskCoordinator.prototype.hasHelpOpen = function (user, channel) {
+    return this.service.getHelpRequestByUserId(user.id).then(function (helpRequest) {
+      var message;
+      if (helpRequest) {
+        message = [
+          'You asked me for help',
+          moment.unix(helpRequest.date).from(moment()) + ':',
+          '\n>' + helpRequest.message.replace('<@' + this.delegate.service.self.id + '>', '')
+        ];
+        channel.send(message.join(' '));
+      } else {
+        channel.send('You do not have any open help requests.');
+      }
+      logger.info('checked for open help request by user', user.id, '(' + user.name + ')');
+    }.bind(this)).catch(function (error) {
+      logger.error('problem checking if user has open request', user.id, '(' + user.name + ')');
+      channel.send('Hrrm.. Something when wrong trying to look up your request');
+    });
+  };
+
   return TaskCoordinator;
 }).call(this);

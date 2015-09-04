@@ -56,6 +56,8 @@ module.exports = (function () {
       this.taskCoordinator.provideHelp(user, message, channel);
     } else if (Interpretter.isNoLongerLookingForHelp(message.text)) {
       this.taskCoordinator.removeHelp(user, channel);
+    } else if (Interpretter.isCheckingForOpenHelpRequest(message.text)) {
+      this.taskCoordinator.hasHelpOpen(user, channel);
     }
     logger.info(message.user, '(', user.name, ') pinged from', channel.getType(), 'with message', message.text);
   };

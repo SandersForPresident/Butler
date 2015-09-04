@@ -13,5 +13,9 @@ module.exports = (function () {
     return message.toLowerCase().indexOf('dont need help') > -1;
   };
 
+  service.isCheckingForOpenHelpRequest = function (message) {
+    return message.toLowerCase().indexOf('have help') > -1;
+  };
+
   return service;
 }).call(this);
