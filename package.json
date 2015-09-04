@@ -14,6 +14,7 @@
     "log4js": "^0.6.26",
     "moment": "^2.10.6",
     "redis": "^1.0.0",
+    "request-promise": "^0.4.3",
     "slack-client": "^1.4.1"
   },
   "devDependencies": {
