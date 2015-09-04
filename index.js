@@ -14,9 +14,23 @@ var Slack = require('slack-client'),
     throw new Error('Slack token is required. Please provide SLACK_TOKEN as an environment variable');
   }
 
-  slack = new Slack(token, true);
   redis = Redis.createClient({detect_buffers: true});
-  redis = Promise.promisifyAll(redis);
+
+  // promisify lists
+  redis.lpushAsync = Promise.promisify(redis.lpush);
+  redis.lrangeAsync = Promise.promisify(redis.lrange);
+  redis.lremAsync = Promise.promisify(redis.lrem);
+
+  // promisify hashes
+  redis.hmsetAsync = Promise.promisify(redis.hmset);
+  redis.hmgetAsync = Promise.promisify(redis.hmget);
+  redis.hgetallAsync = Promise.promisify(redis.hgetall);
+
+  // promisify all
+  redis.getAsync = Promise.promisify(redis.get);
+  redis.setAsync = Promise.promisify(redis.set);
+
+  slack = new Slack(token, true);
   bot = new Bot(slack, redis);
 
   http.createServer(function (req, res) {
