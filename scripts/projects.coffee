@@ -21,7 +21,7 @@ projectTypes =
 module.exports = (robot) ->
   projectPattern = new RegExp('projects .*(?:need|want|have|looking for).* (' + (knownTech.join '|') + ')', 'i');
 
-  robot.hear projectPattern, (msg) ->
+  projectResponseHandler = (msg) ->
     skill = msg.match[1].toLowerCase()
 
     msg.http('http://googledoctoapi.forberniesanders.com/1zKQZGGdKvDudZKKyds33vZMPwxt7I8soKt9qZ0t1LhE/')
@@ -60,7 +60,10 @@ module.exports = (robot) ->
             'by',
             leaders.join ', '
           ]
-
           projectMessage.join ' '
 
         msg.send _.flatten(message).join('\n')
+
+
+  robot.hear projectPattern, projectResponseHandler
+  robot.respond projectPattern, projectResponseHandler

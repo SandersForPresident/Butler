@@ -28,7 +28,7 @@ module.exports = (robot) ->
         robot.send {room: user.name}, welcomeMessage
       , SAFE_TTL
 
-
-  robot.respond /(.*?)/g, (res) ->
-    if res.message.user.name == res.message.user.room
-      res.send 'I am responding'
+  #
+  # robot.respond /(.*?)/g, (res) ->
+  #   if res.message.user.name == res.message.user.room
+  #     res.send 'I am responding'
