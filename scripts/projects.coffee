@@ -38,8 +38,8 @@ module.exports = (robot) ->
       .map (project) ->
         project =
           'name': project.project,
-          'channel': project.slack_channel,
-          'leaders': project.slack_name,
+          'channel': project.slack_channel.replace('#', ''),
+          'leaders': project.slack_name.split(','),
           'tech': project.used_tech.toLowerCase(),
           'description': project.description,
           'type': _.snakeCase project.project_type
@@ -47,6 +47,20 @@ module.exports = (robot) ->
         (project.type of projectTypes && _.contains projectTypes[project.type], skill) || _.contains project.tech, skill
 
       if projects.length > 0
-        msg.send _.map projects, (project) ->
-          project.name + ' - ' + project.type + ', ' + project.tech
-        .join '\n'
+        message = ['We have found ' + projects.length + ' projects:']
+        message.push _.map projects, (project) ->
+          leaders = _.map project.leaders, (leader) ->
+            '<@' + leader.replace('@', '').trim() + '>'
+
+          projectMessage = [
+            '- ',
+            project.name,
+            'in',
+            '<#' + project.channel + '>',
+            'by',
+            leaders.join ', '
+          ]
+
+          projectMessage.join ' '
+
+        msg.send _.flatten(message).join('\n')
