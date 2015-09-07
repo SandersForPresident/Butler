@@ -6,13 +6,22 @@
 
 _ = require 'lodash'
 
+knownTech = [
+  'html', 'css', 'less', 'saas', 'javascript', 'js', 'front end', 'back end', 'nodejs', 'node js',
+  'rails', 'ruby', 'obj-c', 'objective c', 'objective-c', 'java',
+  'android', 'jekyll', 'grunt', 'gulp', 'wordpress', 'bootstrap', 'c#', 'net',
+  'django', 'python', 'php'
+]
+
 projectTypes =
   'website': ['html', 'css', 'javascript', 'js'],
   'web_app': ['html', 'css', 'javascript', 'js'],
-  'mobile_app': ['ios', 'android', 'iphone', 'java', 'objc', 'objective c', '']
+  'mobile_app': ['ios', 'android', 'iphone', 'java', 'objc', 'objective c']
 
 module.exports = (robot) ->
-  robot.hear /projects (?!need|want|have|looking for).* (?:need|want|have|looking for) (\w+)/i, (msg) ->
+  projectPattern = new RegExp('projects .*(?:need|want|have|looking for).* (' + (knownTech.join '|') + ')', 'i');
+
+  robot.hear projectPattern, (msg) ->
     skill = msg.match[1].toLowerCase()
 
     msg.http('http://googledoctoapi.forberniesanders.com/1zKQZGGdKvDudZKKyds33vZMPwxt7I8soKt9qZ0t1LhE/')
@@ -23,7 +32,6 @@ module.exports = (robot) ->
         robot.emit 'error', err, res
         return
 
-      console.log 'checking projects for ' + skill
       projects = JSON.parse(body);
       projects = _.filter projects, (project) ->
         project.slack_name && project.project_type && project.slack_channel && project.used_tech
@@ -38,9 +46,7 @@ module.exports = (robot) ->
       .filter (project) ->
         (project.type of projectTypes && _.contains projectTypes[project.type], skill) || _.contains project.tech, skill
 
-      if projects.length == 0
-        msg.send 'We could not find any projects for ' + skill
-      else
+      if projects.length > 0
         msg.send _.map projects, (project) ->
           project.name + ' - ' + project.type + ', ' + project.tech
         .join '\n'
