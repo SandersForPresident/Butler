@@ -55,7 +55,7 @@ module.exports = (robot) ->
 
   projectResponseHandler = (msg) ->
     skill = msg.match[1].toLowerCase()
-    console.log 'checking'
+
     getProjects (projects) ->
       projects = projects.filter (project) ->
         (project.type_slug of projectTypes && _.contains projectTypes[project.type_slug], skill) || _.contains project.tech, skill
