@@ -21,10 +21,8 @@ projectTypes =
 module.exports = (robot) ->
   projectPattern = new RegExp('projects .*(?:need|want|have|looking for).* (' + (knownTech.join '|') + ')', 'i');
 
-  projectResponseHandler = (msg) ->
-    skill = msg.match[1].toLowerCase()
-
-    msg.http('http://googledoctoapi.forberniesanders.com/1zKQZGGdKvDudZKKyds33vZMPwxt7I8soKt9qZ0t1LhE/')
+  getProjects = (cb) ->
+    robot.http('http://googledoctoapi.forberniesanders.com/1zKQZGGdKvDudZKKyds33vZMPwxt7I8soKt9qZ0t1LhE/')
     .header('User-Agent', 'Mozilla/5.0')
     .get() (err, res, body) ->
       if err
@@ -42,28 +40,36 @@ module.exports = (robot) ->
           'leaders': project.slack_name.split(','),
           'tech': project.used_tech.toLowerCase(),
           'description': project.description,
-          'type': _.snakeCase project.project_type
-      .filter (project) ->
-        (project.type of projectTypes && _.contains projectTypes[project.type], skill) || _.contains project.tech, skill
+          'type': project.project_type,
+          'type_slug': _.snakeCase project.project_type
+      cb(projects)
+
+  formatProjectMessage = (project) ->
+    [
+      '*' + project.name + '*',
+      '(' + project.type + ')',
+      'in <#' + project.channel + '>',
+      'lead by ' + project.leaders.join ', '
+    ].join ' '
+
+
+  projectResponseHandler = (msg) ->
+    skill = msg.match[1].toLowerCase()
+    console.log 'checking'
+    getProjects (projects) ->
+      projects = projects.filter (project) ->
+        (project.type_slug of projectTypes && _.contains projectTypes[project.type_slug], skill) || _.contains project.tech, skill
 
       if projects.length > 0
         message = ['We have found ' + projects.length + ' projects:']
-        message.push _.map projects, (project) ->
-          leaders = _.map project.leaders, (leader) ->
-            '<@' + leader.replace('@', '').trim() + '>'
-
-          projectMessage = [
-            '- ',
-            project.name,
-            'in',
-            '<#' + project.channel + '>',
-            'by',
-            leaders.join ', '
-          ]
-          projectMessage.join ' '
-
+        message.push _.map projects, formatProjectMessage
         msg.send _.flatten(message).join('\n')
 
+  robot.respond /list projects/i, (msg) ->
+    getProjects (projects) ->
+      messages = _.map projects, formatProjectMessage
+      messages.push('You can find all the projects at https://docs.google.com/spreadsheets/d/1zKQZGGdKvDudZKKyds33vZMPwxt7I8soKt9qZ0t1LhE');
+      msg.send messages.join '\n'
 
   robot.hear projectPattern, projectResponseHandler
   robot.respond projectPattern, projectResponseHandler
