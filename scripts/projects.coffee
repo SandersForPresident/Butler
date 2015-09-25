@@ -36,19 +36,21 @@ module.exports = (robot) ->
       .map (project) ->
         project =
           'name': project.project,
-          'channel': project.slack_channel.replace('#', '').trim(),
+          'channel': robot.adapter.client.getChannelByName(project.slack_channel.replace('#', '').trim()),
           'leaders': project.slack_name.split(','),
           'tech': project.used_tech.toLowerCase(),
           'description': project.description,
           'type': project.project_type,
           'type_slug': _.snakeCase project.project_type
+      .filter (project) ->
+        return !!project.channel
       cb(projects)
 
   formatProjectMessage = (project) ->
     [
       '*' + project.name + '*',
       '(' + project.type + ')',
-      'in <#' + project.channel + '>',
+      'in <#' + project.channel.id + '>',
       'lead by ' + project.leaders.join ', '
     ].join ' '
 
@@ -74,4 +76,3 @@ module.exports = (robot) ->
 
   robot.hear projectPattern, projectResponseHandler
   robot.respond projectPattern, projectResponseHandler
-
