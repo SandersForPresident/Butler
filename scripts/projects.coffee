@@ -36,7 +36,7 @@ module.exports = (robot) ->
       .map (project) ->
         project =
           'name': project.project,
-          'channel': project.slack_channel.replace('#', ''),
+          'channel': project.slack_channel.replace('#', '').trim(),
           'leaders': project.slack_name.split(','),
           'tech': project.used_tech.toLowerCase(),
           'description': project.description,
@@ -66,10 +66,12 @@ module.exports = (robot) ->
         msg.send _.flatten(message).join('\n')
 
   robot.respond /list projects/i, (msg) ->
+    msg.send 'I\'ll PM you a list of the projects!'
     getProjects (projects) ->
       messages = _.map projects, formatProjectMessage
       messages.push('You can find all the projects at https://docs.google.com/spreadsheets/d/1zKQZGGdKvDudZKKyds33vZMPwxt7I8soKt9qZ0t1LhE');
-      msg.send messages.join '\n'
+      robot.send {room: msg.envelope.user.name}, messages.join '\n'
 
   robot.hear projectPattern, projectResponseHandler
   robot.respond projectPattern, projectResponseHandler
+
