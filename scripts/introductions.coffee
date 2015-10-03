@@ -16,7 +16,10 @@ module.exports = (robot) ->
       'My name is Butler, and I try to make it easier for everyone to find what they\'re looking for.',
       'You can ask me things like:',
       '- Are there any projects that need &lt;phrase&gt;?',
+      'To list projects from a channel you can say:',
       '- butler list projects',
+      'Or DM me directly:',
+      '- list projects',
       '\n',
       'For now, you should introduce yourself in the <#' + channelID + '> channel and browse some of our projects!'
     ].join('\n')
