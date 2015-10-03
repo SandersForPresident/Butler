@@ -33,7 +33,7 @@ module.exports = (robot) ->
         robot.send {room: user.name}, getWelcomeMessage(introChannel.id)
       , SAFE_TTL
 
-  robot.respond /show introduction/i, (msg) ->
+  robot.respond /show welcome/i, (msg) ->
     introChannel = robot.adapter.client.getChannelByName('introduction')
     msg.send getWelcomeMessage(introChannel.id)
   #
