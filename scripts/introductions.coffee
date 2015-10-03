@@ -33,6 +33,9 @@ module.exports = (robot) ->
         robot.send {room: user.name}, getWelcomeMessage(introChannel.id)
       , SAFE_TTL
 
+  robot.respond /show introduction/i, (msg) ->
+    introChannel = robot.adapter.client.getChannelByName('introduction')
+    msg.send getWelcomeMessage(introChannel.id)
   #
   # robot.respond /(.*?)/g, (res) ->
   #   if res.message.user.name == res.message.user.room
