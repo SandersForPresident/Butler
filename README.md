@@ -163,7 +163,7 @@ Where `<adapter>` is the name of your adapter without the `hubot-` prefix.
 If your Heroku account has been verified you can run the following to enable
 and add the Redis to Go addon to your app.
 
-    % heroku addons:add redistogo:nano
+    % heroku addons:create redistogo:nano
 
 If you run into any problems, checkout Heroku's [docs][heroku-node-docs].
 
